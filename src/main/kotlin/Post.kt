@@ -4,7 +4,7 @@ data class Post(
     val fromId: Int,                    //Идентификатор автора записи
     val date: Int,                      //Время публикации записи
     val text: String,                   //Текст записи.
-    var comments: Comments?,             //Информация о комментариях к записи, объект с полями:
+    var comments: Array<Comments>?,             //Информация о комментариях к записи, объект с полями:
     val copyright: String?,             //Источник материала, объект с полями:
     val likes: Long,                    //Информация о лайках к записи, объект с полями:
     val reposts: Repost,                //Информация о репостах записи («Рассказать друзьям»), объект с полями:
@@ -67,7 +67,7 @@ object WallService {
         for ((index) in posts.withIndex())
             if (postId == posts[index].id){
                 val post = posts[index]
-                post.comments = comment
+                post.comments = post.comments?.plus(comment)
 
             } else {
                 throw PostNotFoundException("Ошибка! Пост с id = $postId не существует")
@@ -120,11 +120,5 @@ fun main() {
     WallService.addPost(post)
     WallService.printAllPosts()
 
-    println(WallService.createComment(1, Comments(0, 2, 3, "Hello")))
-    println(WallService.createComment(2, Comments(0, 2, 3, "what")))
-    println(WallService.createComment(15, Comments(0, 2, 3, "gde")))
-
-
-
-//    WallService.printAttachments(post)
+    WallService.printAttachments(post)
 }

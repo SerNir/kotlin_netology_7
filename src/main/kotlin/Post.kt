@@ -56,11 +56,7 @@ data class Post(
 
 data class Repost(val count: Int = 0, val userReposts: Boolean = false)
 
-data class Comments(var count: Int = 0, val fromId: Int, val date: Int, val comment: String? = null){
-    init {
-        count++
-    }
-}
+data class Comments(var count: Int = 0, val fromId: Int, val date: Int, val comment: String)
 
 object WallService {
     private var id = 0
@@ -105,7 +101,7 @@ object WallService {
         }
     }
 
-    fun addAllPosts(){
+    fun printAllPosts(){
         for(post in posts){
             println(post)
         }
@@ -122,7 +118,7 @@ fun main() {
         )
     )
     WallService.addPost(post)
-    WallService.addAllPosts()
+    WallService.printAllPosts()
 
     println(WallService.createComment(1, Comments(0, 2, 3, "Hello")))
     println(WallService.createComment(2, Comments(0, 2, 3, "what")))

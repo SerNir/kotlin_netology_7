@@ -46,4 +46,13 @@ class PostKtTest {
         val post4 = Post(0, 2, 2, 24052022, "Update Post", null, "2000", 454, Repost(), 4525, "update")
         assertEquals(false, posts.updatePost(post4))
     }
+
+    @Test(expected = PostNotFoundException::class)
+    fun shouldTrow(){
+        val post0 = Post(0, 1, 1, 23052022, "FIRST POST", null, null, 212, Repost(), 212, "post")
+
+        val posts = WallService
+        posts.addPost(post0)
+        WallService.createComment(0,Comments(1,2,3, "FirstComment"))
+    }
 }

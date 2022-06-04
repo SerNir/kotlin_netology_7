@@ -48,11 +48,11 @@ class PostKtTest {
     }
 
     @Test(expected = PostNotFoundException::class)
-    fun shouldTrow(){
+    fun shouldTrow() {
         val post0 = Post(0, 1, 1, 23052022, "FIRST POST", null, null, 212, Repost(), 212, "post")
 
         val posts = WallService
         posts.addPost(post0)
-        WallService.createComment(0,Comments(1,2,3, "FirstComment"))
+        WallService.createComment(0, Comments(1, 2, 3, "FirstComment"))
     }
 }

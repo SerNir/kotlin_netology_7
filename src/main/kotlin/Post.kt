@@ -65,7 +65,7 @@ object WallService {
 
     fun createComment(postId: Int, comment: Comments): Comments {
         for ((index) in posts.withIndex())
-            if (postId == posts[index].id){
+            if (postId == posts[index].id) {
                 val post = posts[index]
                 post.comments = post.comments?.plus(comment)
 
@@ -101,8 +101,8 @@ object WallService {
         }
     }
 
-    fun printAllPosts(){
-        for(post in posts){
+    fun printAllPosts() {
+        for (post in posts) {
             println(post)
         }
     }
@@ -112,13 +112,13 @@ fun main() {
     val post = Post(
         2, 2, 2, 30, "post", null, null, 12, Repost(), 0, "post", 21,
         arrayOf(
-            AudioAttachment(Audio(1, 2, "www", "singer", null, 130)),
-            VideoAttachment(Video(2, 3, "www", "video", "", 200)),
-            PhotoAttachment(Photo(3, 1, "www.ru"))
+            AudioAttachment("audio", Audio(1, 2, "www", "singer", null, 130)),
+            VideoAttachment("video", Video(2, 3, "www", "video", "", 200)),
+            PhotoAttachment("photo", Photo(3, 1, "www.ru"))
         )
     )
-    WallService.addPost(post)
-    WallService.printAllPosts()
+//    WallService.addPost(post)
+//    WallService.printAllPosts()
 
     WallService.printAttachments(post)
 }

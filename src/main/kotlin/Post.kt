@@ -4,10 +4,10 @@ data class Post(
     val fromId: Int,                    //Идентификатор автора записи
     val date: Int,                      //Время публикации записи
     val text: String,                   //Текст записи.
-    var comments: Array<Comments>?,             //Информация о комментариях к записи, объект с полями:
+    var comments: Array<Comments>?,     //Информация о комментариях к записи, объект с полями:
     val copyright: String?,             //Источник материала, объект с полями:
     val likes: Long,                    //Информация о лайках к записи, объект с полями:
-    val reposts: Repost,                //Информация о репостах записи («Рассказать друзьям»), объект с полями:
+    val reposts: Repost?,                //Информация о репостах записи («Рассказать друзьям»), объект с полями:
     val views: Long,                    //Информация о просмотрах записи.
     val postType: String,               //Тип записи, может принимать следующие значения: post, copy, reply, postpone, suggest.
     val createdBy: Int? = null,         //Идентификатор администратора, который опубликовал запись (возвращается только для сообществ при запросе с ключом доступа администратора)
@@ -56,7 +56,7 @@ data class Post(
 
 data class Repost(val count: Int = 0, val userReposts: Boolean = false)
 
-data class Comments(var count: Int = 0, val fromId: Int, val date: Int, val comment: String)
+data class Comments(var id: Int = 0, val fromId: Int, val date: Int, val comment: String)
 
 object WallService {
     private var id = 0
@@ -64,15 +64,18 @@ object WallService {
     private var comments = emptyArray<Comments>()
 
     fun createComment(postId: Int, comment: Comments): Comments {
-        for ((index) in posts.withIndex())
+        for ((index) in posts.withIndex()) {
             if (postId == posts[index].id) {
                 val post = posts[index]
-                post.comments = post.comments?.plus(comment)
-
-            } else {
-                throw PostNotFoundException("Ошибка! Пост с id = $postId не существует")
+                if (post.comments == null) {
+                    post.comments = arrayOf(comment)
+                    return comment
+                } else
+                    post.comments = post.comments?.plus(comment)
+                return comment
             }
-        return comment
+        }
+        throw PostNotFoundException("Post ne naiden")
     }
 
     fun addPost(post: Post): Post {
@@ -106,6 +109,29 @@ object WallService {
             println(post)
         }
     }
+
+    fun getAllComment() {
+        for (post in posts) {
+            if (post.comments?.isEmpty() == false) {
+                for (comment in post.comments!!) {
+                    println(comment)
+                }
+            }
+        }
+    }
+
+    fun getCommentById(postId: Int, commentId: Int): Comments? {
+        for (post in posts) {
+            if (post.id == postId) {
+                for (comment in post.comments!!) {
+                    if (comment.id == commentId) {
+                        return comment
+                    }
+                }
+            }
+        }
+        return null
+    }
 }
 
 fun main() {
@@ -117,8 +143,4 @@ fun main() {
             PhotoAttachment("photo", Photo(3, 1, "www.ru"))
         )
     )
-//    WallService.addPost(post)
-//    WallService.printAllPosts()
-
-    WallService.printAttachments(post)
 }

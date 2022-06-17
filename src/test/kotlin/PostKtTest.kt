@@ -27,7 +27,7 @@ class PostKtTest {
         posts.addPost(post3)
 
         val post4 = Post(4, 2, 2, 24052022, "Update Post", null, "2000", 454, Repost(), 4525, "update")
-        assertEquals(true, posts.updatePost(post4))
+        assertTrue(posts.updatePost(post4))
     }
 
     @Test
@@ -44,7 +44,7 @@ class PostKtTest {
         posts.addPost(post3)
 
         val post4 = Post(0, 2, 2, 24052022, "Update Post", null, "2000", 454, Repost(), 4525, "update")
-        assertEquals(false, posts.updatePost(post4))
+        assertFalse(posts.updatePost(post4))
     }
 
     @Test(expected = PostNotFoundException::class)
@@ -53,6 +53,17 @@ class PostKtTest {
 
         val posts = WallService
         posts.addPost(post0)
-        WallService.createComment(0, Comments(1, 2, 3, "FirstComment"))
+        posts.createComment(0, Comments(1, 2, 3, "FirstComment"))
+    }
+
+    @Test
+    fun createComment() {
+        val post0 = Post(0, 1, 1, 23052022, "FIRST POST", null, null, 212, Repost(), 212, "post")
+        val posts = WallService
+        posts.addPost(post0)
+        val comment = posts.createComment(1, Comments(1, 2, 3, "Comment"))
+
+        assertEquals(comment, posts.getCommentById(1,1))
+
     }
 }
